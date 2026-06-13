@@ -4,9 +4,8 @@
 # config.yaml, SOUL.md, and the two MCP entries now ship in the distribution.
 # Idempotent: installs if absent, updates in place if present.
 #
-# NOTE (verify at test-install): exact named-profile flags below are the
-# documented shapes; confirm `--name/--alias` and `profile update` syntax on the
-# first real run and adjust if Hermes differs.
+# Verified on the live box: `--name/--alias/-y` work; profile flag is `-p`.
+# `profile update <name>` syntax still unverified (only used on re-install).
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
@@ -28,4 +27,4 @@ printf '%s\n' \
   | put_remote "/root/.hermes/profiles/$PROFILE/.env" 600
 
 log "profile '$PROFILE' installed/updated; Telegram secrets in place"
-log "config check: ssh root@$(vps_ip) hermes --profile $PROFILE config get model.default"
+log "config check: ssh root@$(vps_ip) hermes -p $PROFILE config show"

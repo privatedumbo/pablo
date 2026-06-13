@@ -3,8 +3,9 @@
 # Mirrors docs/setup/agent.md › Telegram Gateway.
 # Idempotent: the gateway installer is safe to re-run.
 #
-# NOTE (verify at test-install): `--profile pablo` scoping + resulting service
-# name (hermes-gateway vs profile-specific) — confirm on first run.
+# Verified: profile flag is `-p pablo`. Still unverified: gateway install under
+# `-p` + the resulting service name (hermes-gateway vs profile-specific) —
+# confirm at the gateway cutover (roadmap step 2.3).
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
@@ -12,7 +13,7 @@ set -euo pipefail
 ssh_do '/usr/local/lib/hermes-agent/venv/bin/python -m pip install -q python-telegram-bot'
 
 # install + start as a system service (feeds the two y/n prompts)
-ssh_do "printf 'y\\ny\\n' | hermes --profile '$PROFILE' gateway install --system --run-as-user root"
+ssh_do "printf 'y\\ny\\n' | hermes -p '$PROFILE' gateway install --system --run-as-user root"
 
 log "waiting for the gateway to connect…"
 sleep 5
