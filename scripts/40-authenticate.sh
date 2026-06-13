@@ -31,9 +31,11 @@ read -r -p "Authenticate the Nous Account now? [y/N] " a; [ "$a" = y ] && \
 read -r -p "Log in the two Google accounts now? [y/N] " a
 if [ "$a" = y ]; then
   log "opening SSH tunnel localhost:8000 → VPS:8000 (background)…"
-  ssh -fNL 8000:localhost:8000 -o ExitOnForwardFailure=yes "root@$ip"
+  # background with the shell's & (not ssh -f) so $! captures the PID under set -u
+  ssh -NL 8000:localhost:8000 -o ExitOnForwardFailure=yes "root@$ip" &
   tunnel_pid=$!
   trap '[ -n "${tunnel_pid:-}" ] && kill "$tunnel_pid" 2>/dev/null || true' EXIT
+  sleep 2   # let the forward establish before the login hits :8000
 
   echo; log "PERSONAL account — open the localhost:8000/authorize URL, sign in, paste the callback URL back:"
   sshi "hermes -p '$PROFILE' mcp login google_personal"
