@@ -24,12 +24,13 @@ cat <<EOF
 EOF
 
 # 1) Nous — open the printed URL, sign in, paste the redirect URL back.
-read -r -p "Authenticate the Nous Account now? [y/N] " a; [ "$a" = y ] && \
+read -r -p "Authenticate the Nous Account now? [y/N] " a
+[[ $a == [Yy] ]] && \
   sshi "hermes -p '$PROFILE' auth add nous --type oauth --no-browser --manual-paste"
 
 # 2+3) Google — needs a tunnel so Google's redirect reaches the VPS:8000.
 read -r -p "Log in the two Google accounts now? [y/N] " a
-if [ "$a" = y ]; then
+if [[ $a == [Yy] ]]; then
   log "opening SSH tunnel localhost:8000 → VPS:8000 (background)…"
   # background with the shell's & (not ssh -f) so $! captures the PID under set -u
   ssh -NL 8000:localhost:8000 -o ExitOnForwardFailure=yes "root@$ip" &
