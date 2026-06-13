@@ -1,6 +1,6 @@
 # 0005 — Package Pablo as a profile distribution with bootstrap scripts
 
-- **Status:** accepted
+- **Status:** accepted (spec↔script mirror superseded by [0006](0006-scripts-as-canonical-runbook.md))
 - **Date:** 2026-06-13
 
 ---

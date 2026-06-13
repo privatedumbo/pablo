@@ -6,6 +6,6 @@ Gmail/Calendar access.
 
 Start here:
 
-- **[Setup](setup/README.md)** — stand the system up from zero, in order.
+- **[Runbook](../scripts/README.md)** — stand the system up from zero, in order.
 - **[Decisions (ADRs)](adr/README.md)** — *why* it is built the way it is.
 - **[Glossary](../CONTEXT.md)** — the domain terms used across these docs.

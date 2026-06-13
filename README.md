@@ -15,17 +15,17 @@ A lost VPS is not fatal. Recovery is **stateless** — a rebuilt Pablo is
 config-identical but starts with empty memory (see
 [ADR-0005](docs/adr/0005-package-pablo-as-profile-distribution.md)).
 
-1. Provision the box and install Hermes — `scripts/` (mirror of
-   [`docs/setup/`](docs/setup/README.md)).
+1. Provision the box and install Hermes — see the runbook in
+   [`scripts/README.md`](scripts/README.md).
 2. Install this profile:
    ```bash
    hermes profile install github.com/privatedumbo/pablo --name pablo --alias
    ```
 3. Restore secrets (`.env`) and complete the interactive logins (Nous + both
-   Google accounts). See [`docs/setup/credentials.md`](docs/setup/credentials.md).
+   Google accounts). See [`scripts/README.md`](scripts/README.md).
 
 ## Documentation
 
-- **[Setup](docs/setup/README.md)** — stand the system up from zero, in order.
+- **[Runbook](scripts/README.md)** — stand the system up from zero, in order.
 - **[Decisions (ADRs)](docs/adr/README.md)** — *why* it is built this way.
 - **[Glossary](CONTEXT.md)** — the canonical domain terms.
