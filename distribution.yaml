@@ -1,0 +1,22 @@
+name: pablo
+version: 0.1.0
+description: "Pablo — a personal Hermes agent: Telegram gateway, web search, and personal + work Gmail/Calendar (read-only work) via a self-hosted Google Workspace MCP."
+hermes_requires: ">=0.16.0"
+author: "Franco Bocci"
+license: "MIT"
+
+# Env vars the *profile* itself needs (the Telegram gateway runs in this profile).
+# The installer checks these against your shell and the profile's .env.
+#
+# NOT listed here on purpose:
+#   - GOOGLE_OAUTH_CLIENT_ID / GOOGLE_OAUTH_CLIENT_SECRET — consumed by the
+#     self-hosted Google Workspace MCP server (system unit), not this profile.
+#   - HCLOUD_TOKEN — provisioning-time only.
+# Both are handled by the bootstrap scripts. See docs/setup/credentials.md.
+env_requires:
+  - name: TELEGRAM_BOT_TOKEN
+    description: "Telegram bot token from @BotFather (messaging gateway)"
+    required: true
+  - name: TELEGRAM_ALLOWED_USERS
+    description: "Comma-separated numeric Telegram user ids allowed to message the bot"
+    required: true

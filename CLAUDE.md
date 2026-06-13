@@ -1,0 +1,105 @@
+# pablo
+
+## Agent skills
+
+This repo is configured for the Beyond Data engineering skills.
+Configuration lives in `docs/agents/`:
+
+- `issue-tracker.md` — tracker, team, project (personal Linear via `PABLO_LINEAR_API_KEY`)
+- `labels.md` — type and workflow labels
+- `ways-of-working.md` — Epic/Issue model, domain docs
+
+Reporting (`/to-briefing`) is not configured — the personal workspace has no Initiatives.
+
+Skills that read this configuration:
+- `/to-epic` — create Epics
+- `/to-prd` — create PRDs
+- `/to-issues` — break down into vertical-slice issues
+- `/to-briefing` — generate stakeholder status updates
+
+## Python Version
+- Target Python >= 3.14
+- Use modern Python 3.14+ features
+
+## Development Workflow
+
+### Package Management
+- Use `uv` for all dependency management — never use `pip` directly
+- Sync dependencies: `uv sync --all-extras`
+
+### Task Runner
+All tasks use `poe` (poethepoet), defined in `scripts/app.toml`:
+
+```
+uv run poe sync           # Sync all dependencies
+uv run poe install-hooks  # Install pre-commit hooks
+uv run poe format         # Format code with ruff
+uv run poe lint           # Lint and auto-fix with ruff
+uv run poe check          # Type check with mypy
+uv run poe test           # Run tests with pytest
+uv run poe flc            # Format → Lint → Check
+uv run poe flct           # Format → Lint → Check → Test
+```
+
+Run `uv run poe flc` before committing. Run `uv run poe flct` for full validation.
+
+## Code Quality
+
+### Ruff
+- Line length: 88 characters
+- Auto-fix enabled
+- Comprehensive ruleset (`select = ["ALL"]`)
+
+### MyPy
+- Strict mode — handles all type checking
+
+### Pre-commit
+- Hooks run automatically on commit
+- Install with: `uv run poe install-hooks`
+
+## Python Best Practices
+
+### Type Hints
+- Use `str | None` instead of `Optional[str]`
+- Use `list[str]` instead of `List[str]`, `dict[str, int]` instead of `Dict[str, int]`
+- Always include type hints for function parameters and return types
+
+### Style
+- Follow PEP 8
+- Use f-strings for string formatting
+- Use `pathlib.Path` for filesystem operations
+- Prefer dataclasses or Pydantic models for data structures
+- Use trailing commas in multi-line collections
+
+### Error Handling
+- Use specific exception types — no bare `except:`
+- Use `contextlib.suppress()` for intentionally ignored exceptions
+
+## Testing
+
+### Framework
+- Use `pytest` — never `unittest`
+- Tests live in `tests/`
+- One test file per module: `test_<module_name>.py`
+
+### Patterns
+- Use fixtures for setup/teardown, prefer over setup methods
+- Place shared fixtures in `tests/conftest.py`
+- Follow Arrange-Act-Assert (AAA) pattern
+- Use `@pytest.mark.parametrize` for multiple scenarios
+- Keep tests focused — one assertion concept per test
+
+### Coverage
+- Coverage is enabled by default
+- Focus on critical paths and edge cases, not percentages
+
+## Database Guidelines
+
+### ORM Usage
+- Prefer ORMs (SQLAlchemy) for database interactions
+- Use raw SQL only for complex aggregations, bulk operations, or DB-specific features
+
+### Best Practices
+- Always use parameterized queries — never string interpolation
+- Keep database logic in repository/adapter layers
+- Use transactions for data consistency
