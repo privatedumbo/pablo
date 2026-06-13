@@ -3,9 +3,9 @@
 # Mirrors docs/setup/agent.md › Telegram Gateway.
 # Idempotent: the gateway installer is safe to re-run.
 #
-# Verified: profile flag is `-p pablo`. Still unverified: gateway install under
-# `-p` + the resulting service name (hermes-gateway vs profile-specific) —
-# confirm at the gateway cutover (roadmap step 2.3).
+# Verified at cutover: gateway installs under `-p` as a profile-specific unit
+# `hermes-gateway-<profile>` (NOT the shared hermes-gateway), and a named profile
+# logs to ~/.hermes/profiles/<profile>/logs/agent.log.
 set -euo pipefail
 . "$(dirname "$0")/lib.sh"
 
@@ -16,9 +16,11 @@ ssh_do '/usr/local/lib/hermes-agent/venv/bin/python -m pip install -q python-tel
 ssh_do "printf 'y\\ny\\n' | hermes -p '$PROFILE' gateway install --system --run-as-user root"
 
 log "waiting for the gateway to connect…"
-sleep 5
-if ssh_do 'grep -aq "telegram connected\|Gateway running with" ~/.hermes/logs/agent.log'; then
-  log "gateway connected. Message the bot with REAL text (not /start) to test."
+sleep 6
+svc="hermes-gateway-$PROFILE"
+plog="/root/.hermes/profiles/$PROFILE/logs/agent.log"
+if ssh_do "systemctl is-active --quiet '$svc' && grep -aq 'telegram connected\|Gateway running with' '$plog'"; then
+  log "gateway connected ($svc). Message the bot with REAL text (not /start) to test."
 else
-  warn "no 'connected' line yet — tail it: ssh root@$(vps_ip) 'tail -f ~/.hermes/logs/agent.log'"
+  warn "not confirmed yet — check: ssh root@$(vps_ip) 'journalctl -u $svc -n 30 --no-pager; tail $plog'"
 fi
