@@ -20,6 +20,10 @@ else
   ssh_do "hermes profile install '$DISTRIBUTION' --name '$PROFILE' --alias -y"
 fi
 
+# make pablo the sticky default so `hermes` (no -p) targets it, not the empty
+# root profile. (The root 'default' profile cannot be deleted; this demotes it.)
+ssh_do "hermes profile use '$PROFILE'"
+
 # push Telegram secrets into the profile .env (env_requires in distribution.yaml)
 printf '%s\n' \
   "TELEGRAM_BOT_TOKEN=$TELEGRAM_BOT_TOKEN" \
