@@ -14,7 +14,11 @@ require_vars TELEGRAM_BOT_TOKEN TELEGRAM_ALLOWED_USERS
 
 if ssh_do "hermes profile list 2>/dev/null | grep -q '\\b$PROFILE\\b'"; then
   log "profile '$PROFILE' exists — updating from $DISTRIBUTION"
-  ssh_do "hermes profile update '$PROFILE'"
+  # --force-config: config.yaml ships in the distribution and is the source of
+  # truth (ADR-0006), so overwrite it on update. User data (memory, sessions,
+  # auth, .env) is NOT touched by profile update regardless of this flag —
+  # without it, shipped config changes (e.g. new MCP entries) would never deploy.
+  ssh_do "hermes profile update '$PROFILE' --force-config"
 else
   log "installing profile '$PROFILE' from $DISTRIBUTION"
   ssh_do "hermes profile install '$DISTRIBUTION' --name '$PROFILE' --alias -y"
