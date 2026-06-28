@@ -24,7 +24,7 @@ case "${1:-}" in
     cat <<'EOF'
 
   ── Automated steps done. Two interactive steps remain (human paste-back) ──
-    scripts/40-authenticate.sh   # Nous + both Google logins (needs a TTY)
+    scripts/40-authenticate.sh   # Nous + both Google + Linear logins (needs a TTY)
     scripts/50-gateway.sh        # Telegram gateway as a boot service
   Or re-run with:  scripts/bootstrap.sh --all
 EOF

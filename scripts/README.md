@@ -12,7 +12,7 @@ Pablo is config-identical but starts with empty memory.
 cp .env.example .env && $EDITOR .env   # fill secrets (source of truth, ADR-0005)
 git config core.hooksPath .githooks    # enable the secret-blocking pre-commit hook
 scripts/bootstrap.sh                    # 00→30 automated, then guides you
-scripts/40-authenticate.sh             # Nous + 2× Google logins (needs a TTY)
+scripts/40-authenticate.sh             # Nous + 2× Google + Linear logins (needs a TTY)
 scripts/50-gateway.sh                  # Telegram gateway as a boot service
 ```
 
@@ -28,7 +28,7 @@ this repo — resolve it with `hcloud server ip hermes` or pass `VPS_IP=…`.
 | `10-install-agent.sh` | Install Hermes on the box. | ✅ |
 | `20-workspace-mcp.sh` | Install `uv` + the self-hosted Google Workspace MCP `systemd` unit (localhost:8000 only). | ✅ |
 | `30-install-profile.sh` | Install this profile; push Telegram secrets. | ✅ |
-| `40-authenticate.sh` | **Interactive** paste-back logins: Nous Account + both Google accounts. | ❌ TTY |
+| `40-authenticate.sh` | **Interactive** paste-back logins: Nous Account + both Google accounts + Linear. | ❌ TTY |
 | `50-gateway.sh` | Install the Telegram gateway as a boot-time system service. | ✅ |
 | `bootstrap.sh` | Orchestrator for `00`→`30`. | — |
 | `lib.sh` | Shared helpers (sourced, not run). Server spec knobs live here. | — |
@@ -105,6 +105,11 @@ One client authorizes *both* Google accounts; separation happens at login.
   paste it back **within ~1 min** (the code is single-use). Then
   `systemctl restart hermes-gateway`; `hermes mcp list` should show
   `google_personal` = all, `google_work` = `11 selected` (read-only allowlist).
+- **Linear** — `hermes mcp login linear`: official remote MCP at
+  `https://mcp.linear.app/mcp`. Public OAuth endpoint, so **no SSH tunnel** is
+  needed. Open the printed authorize URL, sign in to the `privatedumbo`
+  workspace, paste the callback URL back, then `systemctl restart
+  hermes-gateway`. `hermes mcp list` should show `linear` connected.
 
 ## Gotchas
 

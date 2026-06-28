@@ -39,6 +39,13 @@ this **messaging** gateway — never the [Tool Gateway](#tool-gateway). Write
 The self-hosted [MCP server](#mcp-server) exposing Gmail and Calendar tools to
 the Agent. Runs from the `workspace-mcp` package.
 
+## Linear MCP
+
+Linear's official remote [MCP server](#mcp-server) (`https://mcp.linear.app/mcp`,
+OAuth 2.1). Pablo uses it as a **task manager**: task-like requests ("do this
+tomorrow") become Linear issues, keeping the Calendar for appointments. Unlike
+the Google MCP it is a public endpoint, so authentication needs no SSH tunnel.
+
 ## MCP entry
 
 A named server registration in Hermes config (`mcp_servers.<name>`). Each entry

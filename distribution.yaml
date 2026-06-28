@@ -1,6 +1,6 @@
 name: pablo
 version: 0.1.0
-description: "Pablo — a personal Hermes agent: Telegram gateway, web search, and personal + work Gmail/Calendar (read-only work) via a self-hosted Google Workspace MCP."
+description: "Pablo — a personal Hermes agent: Telegram gateway, web search, personal + work Gmail/Calendar (read-only work) via a self-hosted Google Workspace MCP, and Linear as a task manager via the official remote MCP."
 hermes_requires: ">=0.16.0"
 author: "Franco Bocci"
 license: "MIT"

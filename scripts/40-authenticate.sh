@@ -15,10 +15,11 @@ ip="$(vps_ip)"
 cat <<EOF
 
   ── Pablo authentication (interactive) ───────────────────────────────
-  Three logins, into profile '$PROFILE':
+  Four logins, into profile '$PROFILE':
     1) Nous Account   — paste-back, no tunnel
     2) google_personal — full access
     3) google_work     — read-only (11 tools)
+    4) linear          — task manager (remote MCP, no tunnel)
   ─────────────────────────────────────────────────────────────────────
 
 EOF
@@ -49,4 +50,14 @@ if [[ $a == [Yy] ]]; then
   ssh_do "systemctl restart hermes-gateway || true"
 fi
 
-echo; log "verify: ssh root@$ip 'hermes -p $PROFILE mcp list'  → google_work = 11 selected"
+# 4) Linear — official remote MCP at https://mcp.linear.app/mcp.
+# Public OAuth endpoint, so no SSH tunnel is needed (unlike the Google MCP).
+read -r -p "Authenticate Linear now? [y/N] " a
+if [[ $a == [Yy] ]]; then
+  log "LINEAR — open the printed authorize URL, sign in to the privatedumbo workspace, paste the callback URL back:"
+  sshi "hermes -p '$PROFILE' mcp login linear"
+  log "restarting gateway to pick up the Linear token"
+  ssh_do "systemctl restart hermes-gateway || true"
+fi
+
+echo; log "verify: ssh root@$ip 'hermes -p $PROFILE mcp list'  → google_work = 11 selected, linear connected"

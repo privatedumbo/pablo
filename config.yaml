@@ -158,3 +158,9 @@ mcp_servers:
     auth: oauth
     tools:
       include: [get_events, get_gmail_attachment_content, get_gmail_message_content, get_gmail_messages_content_batch, get_gmail_thread_content, get_gmail_threads_content_batch, list_calendars, list_gmail_filters, list_gmail_labels, query_freebusy, search_gmail_messages]
+  linear:
+    # Linear's official remote MCP (OAuth 2.1, dynamic client registration).
+    # Public endpoint — needs no SSH tunnel, unlike the localhost Google MCP.
+    # Pablo uses this as a task manager: "do this tomorrow" -> Linear issue.
+    url: "https://mcp.linear.app/mcp"
+    auth: oauth
